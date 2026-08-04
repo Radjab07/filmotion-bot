@@ -3,7 +3,7 @@ const express = require('express');
 const QRCode = require('qrcode');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ⚙️ НАСТРОЙКИ: Номер менеджера WhatsApp (без знака +, с кодом страны, например: 77051110511)
 const MANAGER_PHONE = '77051110511';
@@ -23,6 +23,7 @@ const client = new Client({
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--no-zygote',
+            '--single-process',
             '--disable-gpu'
         ]
     }
