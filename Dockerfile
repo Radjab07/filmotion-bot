@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     ca-certificates \
     procps \
-    libsq3-0 \
+    libsqlite3-0 \
     chromium \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
