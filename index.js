@@ -1,6 +1,7 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const express = require('express');
 const QRCode = require('qrcode');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,10 +12,27 @@ const MANAGER_PHONE = '77051110511';
 let currentQR = null;
 let isAuthenticated = false;
 
+// Поиск пути к установленному Chrome на сервере Render / Linux
+let chromePath = undefined;
+const possiblePaths = [
+    '/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium'
+];
+
+for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+        chromePath = p;
+        break;
+    }
+}
+
 // Инициализация WhatsApp клиента
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
+        executablePath: chromePath,
         headless: true,
         args: [
             '--no-sandbox',
