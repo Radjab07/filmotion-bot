@@ -30,9 +30,13 @@ if (!chromePath) {
     }
 }
 
-// Инициализация WhatsApp клиента
+// Инициализация WhatsApp клиента с обходом зависания загрузки (Remote Web Version Cache)
 const client = new Client({
     authStrategy: new LocalAuth(),
+    webVersionCache: {
+        type: 'remote',
+        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014111620-alpha.html'
+    },
     puppeteer: {
         executablePath: chromePath,
         headless: true,
@@ -44,8 +48,7 @@ const client = new Client({
             '--no-first-run',
             '--disable-gpu',
             '--disable-extensions',
-            '--disable-component-update',
-            '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            '--disable-component-update'
         ]
     }
 });
