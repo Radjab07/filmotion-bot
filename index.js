@@ -12,19 +12,21 @@ const MANAGER_PHONE = '77051110511';
 let currentQR = null;
 let isAuthenticated = false;
 
-// Поиск пути к установленному Chrome на сервере Render / Linux
-let chromePath = undefined;
-const possiblePaths = [
-    '/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome',
-    '/usr/bin/google-chrome',
-    '/usr/bin/chromium-browser',
-    '/usr/bin/chromium'
-];
+// Поиск пути к установленному Chrome на сервере Render / Linux / Docker
+let chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || undefined;
+if (!chromePath) {
+    const possiblePaths = [
+        '/usr/bin/chromium',
+        '/usr/bin/chromium-browser',
+        '/usr/bin/google-chrome',
+        '/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome'
+    ];
 
-for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-        chromePath = p;
-        break;
+    for (const p of possiblePaths) {
+        if (fs.existsSync(p)) {
+            chromePath = p;
+            break;
+        }
     }
 }
 
@@ -42,7 +44,9 @@ const client = new Client({
             '--no-first-run',
             '--no-zygote',
             '--single-process',
-            '--disable-gpu'
+            '--disable-gpu',
+            '--disable-extensions',
+            '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         ]
     }
 });
